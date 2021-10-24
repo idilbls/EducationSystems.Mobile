@@ -37,7 +37,7 @@ class GeneralButton extends StatelessWidget {
       onPressed: press,
       style: ElevatedButton.styleFrom(
           primary: color,
-          padding: EdgeInsets.symmetric(horizontal: 40, vertical: 20),
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           textStyle: TextStyle(
               color: textColor, fontSize: 18, fontWeight: FontWeight.w500)),
     );

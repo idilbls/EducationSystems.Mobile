@@ -48,6 +48,7 @@ class _ProfessorLoginPageState extends State<ProfessorLoginPage> {
                 children: <Widget>[
                   Text(
                     "Welcome to Education Systems",
+                  textAlign: TextAlign.center,
                     style: TextStyle(
                         color: kPrimaryColor,
                         fontSize: 24,
@@ -55,15 +56,8 @@ class _ProfessorLoginPageState extends State<ProfessorLoginPage> {
                   ),
                   SizedBox(height: size.height * 0.03,),
                   Text(
-                    "You are a few steps away from tracking your",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 18,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  ),
-                  Text(
-                    "progress in class!",
+                    "You are a few steps away from tracking your progress in class!",
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
                       fontSize: 18,
