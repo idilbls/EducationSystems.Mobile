@@ -1,3 +1,6 @@
+
+import 'package:education_systems_mobile/pages/widget/bottom_navigation_bar.dart';
+import 'package:education_systems_mobile/pages/widget/general_button.dart';
 import 'package:flutter/material.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
 
@@ -10,14 +13,58 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: Center(child: Text("Welcome Page")),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Container(
+            padding: EdgeInsets.only(top: 80, right: 20, left: 20),
+            child: Column(
+              children: <Widget>[
+                Text(
+                  "Welcome to Education Systems",
+                  style: TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: size.height * 0.03,),
+                Text(
+                  "You are a few steps away from tracking your",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 18,
+                      fontWeight: FontWeight.normal,
+                  ),
+                ),
+                Text(
+                  "progress in class!",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+                Image.asset(
+                  "assets/images/home_image.jpg",
+                  width: size.width * 0.8,
+                ),
+                GeneralButton(
+                  text: "Professor Login",
+                  press: (){},
+                ),
+                SizedBox(height: size.height * 0.02,),
+                GeneralButton(
+                  text: "Student Login",
+                  press: (){},
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: WelcomeBottomNavigationBar(),
     );
   }
-
 }
-
-
