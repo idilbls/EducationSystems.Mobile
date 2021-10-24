@@ -1,4 +1,6 @@
 
+import 'package:education_systems_mobile/pages/professor/professor_login_page.dart';
+import 'package:education_systems_mobile/pages/student/student_login_page.dart';
 import 'package:education_systems_mobile/pages/widget/bottom_navigation_bar.dart';
 import 'package:education_systems_mobile/pages/widget/general_button.dart';
 import 'package:flutter/material.dart';
@@ -52,12 +54,12 @@ class WelcomePage extends StatelessWidget {
                 ),
                 GeneralButton(
                   text: "Professor Login",
-                  press: (){},
+                  press: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ProfessorLoginPage())),
                 ),
                 SizedBox(height: size.height * 0.02,),
                 GeneralButton(
                   text: "Student Login",
-                  press: (){},
+                  press: ()=>Navigator.push(context, MaterialPageRoute(builder: (context) => StudentLoginPage())),
                 ),
               ],
             ),

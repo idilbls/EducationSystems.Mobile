@@ -18,7 +18,7 @@ class GeneralButton extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10),
-      width: size.width * 0.8,
+      width: size.width * 0.55,
       child: ClipRRect(
         child: newElevatedButton(),
       ),
