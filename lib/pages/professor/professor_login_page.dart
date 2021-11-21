@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
 
 class ProfessorLoginPage extends StatefulWidget {
+  ProfessorLoginPage({Key key, this.onSignIn}) : super(key: key);
+  final VoidCallback onSignIn;
   final String routeName = "/professor_login";
-  const ProfessorLoginPage({
-    Key key,
-  }) : super(key: key);
+
 
   @override
   _ProfessorLoginPageState createState() => _ProfessorLoginPageState();

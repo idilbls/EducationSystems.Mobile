@@ -84,6 +84,7 @@ class _StudentLoginPageState extends State<StudentLoginPage> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Form(
+          key: formKey,
           child: Center(
             child: Container(
               padding: EdgeInsets.only(top: 40, right: 20, left: 20),

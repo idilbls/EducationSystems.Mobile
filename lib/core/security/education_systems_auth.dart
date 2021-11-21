@@ -8,8 +8,8 @@ import 'package:education_systems_mobile/core/http/network_exceptions.dart';
 import 'package:education_systems_mobile/core/http/response.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
 import 'package:education_systems_mobile/core/utilities/constants.dart' as Constants;
-class BuyuboAuth extends BaseAuth {
-  BuyuboAuth({@required this.authRepository});
+class EducationSystemsAuth extends BaseAuth {
+  EducationSystemsAuth({@required this.authRepository});
   BaseUser currentUserValue;
 
   final AuthRepository authRepository;
@@ -44,6 +44,7 @@ class BuyuboAuth extends BaseAuth {
       var constantsUser = (Constants.CURRENT_USER_ID).toString();
       currentUserValue = new User(
         id: authResult.id,
+        type: authResult.userType
       );
       response = new Response(success: true, result: currentUserValue);
     }, failure: (NetworkExceptions exceptions) {

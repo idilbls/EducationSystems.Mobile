@@ -25,7 +25,7 @@ class _ProfessorHomePageState extends State<ProfessorHomePage> {
         builder: (BuildContext context, ResultState<Student> state) {
           return state.when(
               idle: () => Scaffold(
-                backgroundColor: Colors.red,
+                backgroundColor: Colors.green,
                 body: Container(),
               ),
               loading: () => Center(child: CircularProgressIndicator()),

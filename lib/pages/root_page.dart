@@ -1,6 +1,10 @@
 import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
 import 'package:education_systems_mobile/core/security/role_manager.dart';
+import 'package:education_systems_mobile/data/auth/enum/user_type.dart';
+import 'package:education_systems_mobile/data/auth/user.dart';
+import 'package:education_systems_mobile/pages/professor/professor_login_page.dart';
+import 'package:education_systems_mobile/pages/student/student_login_page.dart';
 import 'package:education_systems_mobile/pages/welcome_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +23,7 @@ class RootPage extends StatefulWidget implements BasePage {
 class _RootPageState extends State<RootPage> {
   AuthStatus authStatus = AuthStatus.notSignedIn;
   BaseAuth auth;
+  User currentUser;
 
   @override
   void didChangeDependencies() {
@@ -28,6 +33,7 @@ class _RootPageState extends State<RootPage> {
       setState(() {
         authStatus =
         user == null ? AuthStatus.notSignedIn : AuthStatus.signedIn;
+
       });
     });
   }
@@ -43,7 +49,7 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext buildContext) {
     switch (authStatus) {
       case AuthStatus.notSignedIn:
-        return new WelcomePage(
+        return new StudentLoginPage(
           onSignIn: () => _updateAuthStatus(AuthStatus.signedIn),
         );
       case AuthStatus.signedIn:

@@ -5,15 +5,18 @@ import 'package:catcher/mode/dialog_report_mode.dart';
 import 'package:catcher/model/catcher_options.dart';
 import 'package:education_systems_mobile/pages/root_page.dart';
 import 'package:education_systems_mobile/pages/routes.dart';
-import 'package:education_systems_mobile/pages/welcome_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_translate/flutter_translate.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'bloc/auth/auth_repository.dart';
 import 'bloc/bloc_providers.dart';
 import 'core/http/api_provider.dart';
 import 'package:education_systems_mobile/theme.dart' as educationSystemsTheme;
+
+import 'core/security/auth_provider.dart';
+import 'core/security/education_systems_auth.dart';
 
 void main() async{
   var delegate = await LocalizationDelegate.create(fallbackLocale: 'tr', supportedLocales: ['tr', 'en']);
@@ -26,6 +29,7 @@ void main() async{
           EducationSystems(
             apiProvider: apiProvider,
           )),
+    debugConfig: debugOptions
   );
 
 }
@@ -38,7 +42,7 @@ class EducationSystems extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: BlocProviders.get(apiProvider: apiProvider),
-      child: _initMaterialApp(context),
+      child: _initAuthProvider(context, apiProvider),
     );
   }
 
@@ -55,6 +59,12 @@ class EducationSystems extends StatelessWidget {
     }
   }
 
+  Widget _initAuthProvider(BuildContext context, ApiProvider apiProvider) {
+    return AuthProvider(
+      auth: EducationSystemsAuth(authRepository: new AuthRepository(apiProvider: apiProvider)),
+      child: _initMaterialApp(context),
+    );
+  }
 
   Widget _initMaterialApp(BuildContext context) {
     var localizationDelegate = LocalizedApp.of(context).delegate;
