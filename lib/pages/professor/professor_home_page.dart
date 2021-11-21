@@ -2,7 +2,7 @@
 import 'package:education_systems_mobile/bloc/student_home/student_home_bloc.dart';
 import 'package:education_systems_mobile/core/bloc/result_state.dart';
 import 'package:education_systems_mobile/core/http/network_exceptions.dart';
-import 'package:education_systems_mobile/data/student/student.dart';
+import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,8 +21,8 @@ class _ProfessorHomePageState extends State<ProfessorHomePage> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      body: BlocBuilder<StudentHomeBloc, ResultState<Student>>(
-        builder: (BuildContext context, ResultState<Student> state) {
+      body: BlocBuilder<StudentHomeBloc, ResultState<LessonListResponse>>(
+        builder: (BuildContext context, ResultState<LessonListResponse> state) {
           return state.when(
               idle: () => Scaffold(
                 backgroundColor: Colors.green,
