@@ -3,6 +3,7 @@ import 'package:catcher/core/catcher.dart';
 import 'package:catcher/handlers/console_handler.dart';
 import 'package:catcher/mode/dialog_report_mode.dart';
 import 'package:catcher/model/catcher_options.dart';
+import 'package:education_systems_mobile/pages/root_page.dart';
 import 'package:education_systems_mobile/pages/routes.dart';
 import 'package:education_systems_mobile/pages/welcome_page.dart';
 import 'package:flutter/material.dart';
@@ -76,7 +77,7 @@ class EducationSystems extends StatelessWidget {
         brightness: Brightness.dark,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: WelcomePage(),
+      home: RootPage(),
       routes: Routes.get(),
     );
   }

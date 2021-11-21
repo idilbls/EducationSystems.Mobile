@@ -7,11 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
 
 class WelcomePage extends StatelessWidget {
+  WelcomePage({Key key,this.onSignIn, this.onSignOut}) : super(key: key);
+  final VoidCallback onSignOut;
+  final VoidCallback onSignIn;
   final String routeName = "/welcome";
-
-  const WelcomePage({
-    Key key,
-  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
