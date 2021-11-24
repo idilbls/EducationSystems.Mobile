@@ -49,7 +49,7 @@ class _RootPageState extends State<RootPage> {
   Widget build(BuildContext buildContext) {
     switch (authStatus) {
       case AuthStatus.notSignedIn:
-        return new StudentLoginPage(
+        return new ProfessorLoginPage(
           onSignIn: () => _updateAuthStatus(AuthStatus.signedIn),
         );
       case AuthStatus.signedIn:

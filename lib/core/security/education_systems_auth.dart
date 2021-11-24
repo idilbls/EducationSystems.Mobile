@@ -45,7 +45,8 @@ class EducationSystemsAuth extends BaseAuth {
       currentUserValue = new User(
         id: authResult.id,
         type: authResult.userType,
-        number: authResult.number
+        number: authResult.number,
+        name: authResult.fullName
       );
       response = new Response(success: true, result: currentUserValue);
     }, failure: (NetworkExceptions exceptions) {

@@ -11,5 +11,6 @@ abstract class BaseAuth {
 abstract class BaseUser {
   int id;
   String number;
+  String name;
   UserTypeEnum userType;
 }
