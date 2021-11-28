@@ -1,30 +1,28 @@
-import 'package:education_systems_mobile/bloc/professor_home/professor_home_bloc.dart';
-import 'package:education_systems_mobile/bloc/student_home/student_home_bloc.dart';
+import 'package:education_systems_mobile/bloc/professor_sections/professor_sections_bloc.dart';
 import 'package:education_systems_mobile/core/bloc/result_state.dart';
 import 'package:education_systems_mobile/core/http/network_exceptions.dart';
-import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
 import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart';
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
-import 'package:education_systems_mobile/pages/professor/professor_lesson_sections_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
-class ProfessorHomePage extends StatefulWidget {
-  ProfessorHomePage({Key key, this.onSignOut}) : super(key: key);
-  final VoidCallback onSignOut;
-  final String routeName = "/professor_home";
+class ProfessorLessonSectionsPage extends StatefulWidget {
+  ProfessorLessonSectionsPage({Key key, this.sectionRequest}) : super(key: key);
+  final String routeName = "/professor_lesson_sections";
+  final SectionRequest sectionRequest;
 
   @override
-  _ProfessorHomePageState createState() => _ProfessorHomePageState();
+  _ProfessorLessonSectionsPageState createState() => _ProfessorLessonSectionsPageState();
 }
 
-class _ProfessorHomePageState extends State<ProfessorHomePage> {
+class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPage> {
   BaseUser _user;
+  SectionRequest _sectionRequest = new SectionRequest();
 
   @override
   void initState() {
@@ -33,19 +31,16 @@ class _ProfessorHomePageState extends State<ProfessorHomePage> {
 
   @override
   void didChangeDependencies() {
-    AuthProvider.of(context).auth.currentUser().then((user) {
-      setState(() {
-        _user = user;
-        context.read<ProfessorHomeBloc>().getProfessorList(_user.id);
-      });
-    });
+    _sectionRequest = widget.sectionRequest;
 
+    context.read<ProfessorSectionsBloc>().getSections(_sectionRequest);
     super.didChangeDependencies();
   }
 
   void _loadLessonListById(BuildContext buildContext, int userId) async {
-    context.read<ProfessorHomeBloc>().getProfessorList(userId);
+    context.read<ProfessorSectionsBloc>().getSections(_sectionRequest);
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +83,7 @@ class _ProfessorHomePageState extends State<ProfessorHomePage> {
           ),
         ],
       ),
-      body: BlocBuilder<ProfessorHomeBloc, ResultState<LessonListResponse>>(
+      body: BlocBuilder<ProfessorSectionsBloc, ResultState<LessonListResponse>>(
         builder: (BuildContext context, ResultState<LessonListResponse> state) {
           return state.when(
               idle: () => Container(),
@@ -116,7 +111,7 @@ class _ProfessorHomePageState extends State<ProfessorHomePage> {
               child: Column(
                 children: [
                   Text(
-                    "Lessons",
+                    "Lesson Sections",
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
@@ -199,20 +194,18 @@ class _ProfessorHomePageState extends State<ProfessorHomePage> {
                     style: ElevatedButton.styleFrom(
                       primary: kPrimaryColor,
                     ),
-                    onPressed: () {
-
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfessorLessonSectionsPage(
-                        sectionRequest: SectionRequest(
-                          userId: _user.id,
-                          lessonCode: lesson.code
-                        ),
-                      )));
-                    },
+                    onPressed: () {},
                     child: Column(
                       children: [
                         Text(
-                          "See Sections",
+                          "Attendance",
                           style: TextStyle(fontSize: 12),
+                        ),
+                        Center(
+                          child: Text(
+                            "View",
+                            style: TextStyle(fontSize: 12),
+                          ),
                         ),
                       ],
                     ),
