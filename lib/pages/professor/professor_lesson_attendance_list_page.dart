@@ -1,29 +1,34 @@
 import 'package:education_systems_mobile/bloc/professor_sections/professor_sections_bloc.dart';
+import 'package:education_systems_mobile/bloc/student_attendance/student_attendance_list_bloc.dart';
 import 'package:education_systems_mobile/core/bloc/result_state.dart';
 import 'package:education_systems_mobile/core/http/network_exceptions.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
+import 'package:education_systems_mobile/data/lesson/enum/status_type_enum.dart';
 import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart';
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
+import 'package:education_systems_mobile/data/lesson/student_attendance_list_response.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
-import 'package:education_systems_mobile/pages/professor/professor_lesson_attendance_list_page.dart';
+import 'package:education_systems_mobile/pages/widget/general_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
-class ProfessorLessonSectionsPage extends StatefulWidget {
-  ProfessorLessonSectionsPage({Key key, this.sectionRequest}) : super(key: key);
-  final String routeName = "/professor_lesson_sections";
-  final SectionRequest sectionRequest;
+class ProfessorLessonAttendanceListPage extends StatefulWidget {
+  ProfessorLessonAttendanceListPage({Key key, this.lessonId, this.lessonName}) : super(key: key);
+  final String routeName = "/professor_lesson_attendance_list";
+  final int lessonId;
+  final String lessonName;
 
   @override
-  _ProfessorLessonSectionsPageState createState() => _ProfessorLessonSectionsPageState();
+  _ProfessorLessonAttendanceListPageState createState() => _ProfessorLessonAttendanceListPageState();
 }
 
-class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPage> {
+class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAttendanceListPage> {
   BaseUser _user;
-  SectionRequest _sectionRequest = new SectionRequest();
+  int _lessonId;
+  String _lessonName;
 
   @override
   void initState() {
@@ -32,14 +37,14 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
 
   @override
   void didChangeDependencies() {
-    _sectionRequest = widget.sectionRequest;
-
-    context.read<ProfessorSectionsBloc>().getSections(_sectionRequest);
+    _lessonId = widget.lessonId;
+    _lessonName = widget.lessonName;
+    context.read<StudentAttendanceListBloc>().getAttendance(_lessonId);
     super.didChangeDependencies();
   }
 
   void _loadLessonListById(BuildContext buildContext, int userId) async {
-    context.read<ProfessorSectionsBloc>().getSections(_sectionRequest);
+    context.read<StudentAttendanceListBloc>().getAttendance(_lessonId);
   }
 
 
@@ -84,8 +89,8 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
           ),
         ],
       ),
-      body: BlocBuilder<ProfessorSectionsBloc, ResultState<LessonListResponse>>(
-        builder: (BuildContext context, ResultState<LessonListResponse> state) {
+      body: BlocBuilder<StudentAttendanceListBloc, ResultState<StudentAttendanceListResponse>>(
+        builder: (BuildContext context, ResultState<StudentAttendanceListResponse> state) {
           return state.when(
               idle: () => Container(),
               loading: () => Center(child: CircularProgressIndicator()),
@@ -97,7 +102,7 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
     );
   }
 
-  _dataWidget(BuildContext buildContext, LessonListResponse data) {
+  _dataWidget(BuildContext buildContext, StudentAttendanceListResponse data) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Container(
@@ -112,7 +117,7 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
               child: Column(
                 children: [
                   Text(
-                    "Lesson Sections",
+                    _lessonName,
                     style: TextStyle(
                         fontWeight: FontWeight.w600,
                         color: Colors.black,
@@ -121,13 +126,31 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
                   SizedBox(
                     height: 10,
                   ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          child: Text("P"),
+                        ),
+                        GeneralButton(
+                          text: "A",
+                          press: (){},
+                        ),
+                        GeneralButton(
+                          text: "All",
+                          press: (){},
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: data.lessons.length,
+              itemCount: data.studentAttendances.length,
               itemBuilder: (BuildContext itemBuilderContext, int index) {
                 return Container(
                   margin: EdgeInsets.only(right: 20, left: 20),
@@ -146,8 +169,8 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
                       ),
                       Container(
                         height: size.height * 0.12,
-                        child: _getLessonListItemView(
-                            buildContext, data.lessons[index], index),
+                        child: _getLessonListItemView(buildContext,
+                            data.studentAttendances[index], index),
                       ),
                     ],
                   ),
@@ -161,25 +184,18 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
   }
 
   _getLessonListItemView(
-      BuildContext buildContext, Lesson lesson, int itemIndex) {
+      BuildContext buildContext, StudentAttendance studentAttendance, int itemIndex) {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         new Row(
           children: [
             Container(
-              width: size.width * 0.58,
+              width: size.width * 0.3,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text(lesson.code + "-" + lesson.title),
-                  SizedBox(
-                    height: 4,
-                  ),
-                  Text(DateFormat('dd-MM-yyyy kk:mm').format(lesson.date)),
+                  Text(studentAttendance.number),
                 ],
               ),
             ),
@@ -188,34 +204,17 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: kPrimaryColor,
-                    ),
-                    onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfessorLessonAttendanceListPage(
-                        lessonId: lesson.id,
-                        lessonName: lesson.code +" - " + lesson.title,
-                      )));
-                    },
-                    child: Column(
-                      children: [
-                        Text(
-                          "Attendance",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                        Center(
-                          child: Text(
-                            "View",
-                            style: TextStyle(fontSize: 12),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  Text(studentAttendance.fullName),
+                ],
+              ),
+            ),
+            Container(
+              width: size.width * 0.3,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(studentAttendance.statusType == StatusTypeEnum.Attendance.value ? "Attendance":
+                  studentAttendance.statusType == StatusTypeEnum.Present.value ? "Present " : "Absent"),
                 ],
               ),
             ),

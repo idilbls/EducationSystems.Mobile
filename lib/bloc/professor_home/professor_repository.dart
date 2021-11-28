@@ -6,6 +6,7 @@ import 'package:education_systems_mobile/core/http/api_result.dart';
 import 'package:education_systems_mobile/core/http/network_exceptions.dart';
 import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart';
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
+import 'package:education_systems_mobile/data/lesson/student_attendance_list_response.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -37,6 +38,22 @@ class ProfessorRepository implements BaseRepository {
           "Lessons/get_proffesor_lesson_sections", data: request.toJson());
       LessonListResponse apiResponse = LessonListResponse.fromJson(response);
       if (apiResponse.lessons != null) {
+        return ApiResult.success(data: apiResponse);
+      }
+      else
+        return ApiResult.failure(error: NetworkExceptions.defaultError(
+            "An unexpected error has occurred."));
+    } catch (e) {
+      return ApiResult.failure(error: NetworkExceptions.getDioException(e));
+    }
+  }
+
+  Future<ApiResult<StudentAttendanceListResponse>> getLessonsAttendance(int lessonId) async {
+    try {
+      final response = await apiProvider.post(
+          "Lessons/get_lessons_attendance", data: lessonId);
+      StudentAttendanceListResponse apiResponse = StudentAttendanceListResponse.fromJson(response);
+      if (apiResponse.studentAttendances != null) {
         return ApiResult.success(data: apiResponse);
       }
       else
