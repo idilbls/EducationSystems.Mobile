@@ -1,4 +1,6 @@
 import 'package:education_systems_mobile/core/security/auth_provider.dart';
+import 'package:education_systems_mobile/data/auth/enum/user_type.dart';
+import 'package:education_systems_mobile/pages/professor/professor_home_page.dart';
 import 'package:education_systems_mobile/pages/widget/bottom_navigation_bar.dart';
 import 'package:education_systems_mobile/pages/widget/general_button.dart';
 import 'package:education_systems_mobile/pages/widget/rounded_input_field.dart';
@@ -54,7 +56,12 @@ class _ProfessorLoginPageState extends State<ProfessorLoginPage> {
       if (response.success && response.result != null) {
         setState(() {
           validationMessageWidget = Padding(padding: EdgeInsets.all(0));
-          widget.onSignIn();
+          if(response.result.type == UserTypeEnum.Student.value){
+            validationMessageWidget = _getValidationMessage("Please use the student login!");
+          }
+          else{
+            Navigator.push(context, MaterialPageRoute(builder: (context) => ProfessorHomePage()));
+          }
         });
       } else {
         setState(() {
@@ -127,6 +134,7 @@ class _ProfessorLoginPageState extends State<ProfessorLoginPage> {
                     validator: (val) => val.isEmpty ? "Password alanı gereklidir." : null,
                     onSaved: (val) => _password = val,
                   ),
+                  validationMessageWidget,
                   GeneralButton(
                     text: "Login",
                     press: validateAndSubmit,

@@ -47,16 +47,6 @@ class _RootPageState extends State<RootPage> {
 
   @override
   Widget build(BuildContext buildContext) {
-    switch (authStatus) {
-      case AuthStatus.notSignedIn:
-        return new ProfessorLoginPage(
-          onSignIn: () => _updateAuthStatus(AuthStatus.signedIn),
-        );
-      case AuthStatus.signedIn:
-        return RoleManager.getHomePage(
-            context, () => _updateAuthStatus(AuthStatus.notSignedIn));
-      default:
-        return null;
-    }
+    return Container();
   }
 }
