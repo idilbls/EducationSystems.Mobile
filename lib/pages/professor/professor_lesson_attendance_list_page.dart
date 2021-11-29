@@ -30,6 +30,7 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
   BaseUser _user;
   int _lessonId;
   String _lessonName;
+  int _filterValue = StatusTypeEnum.Attendance.value;
 
   @override
   void initState() {
@@ -105,6 +106,14 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
 
   _dataWidget(BuildContext buildContext, StudentAttendanceListResponse data) {
     Size size = MediaQuery.of(context).size;
+    StudentAttendanceListResponse innerData = data;
+    if(_filterValue == StatusTypeEnum.Attendance.value){
+      innerData = data;
+    }
+    else{
+      var values = data.studentAttendances.where((e) => e.statusType == _filterValue).toList();
+      innerData = new StudentAttendanceListResponse(studentAttendances: values);
+    }
     return SingleChildScrollView(
       child: Container(
         child: Column(
@@ -146,16 +155,31 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                         SmallButton(
                           text: "P",
                           color: kPrimaryColor,
+                          press: (){
+                            setState(() {
+                              _filterValue = StatusTypeEnum.Present.value;
+                            });
+                          },
                         ),
                         SizedBox(width: 5,),
                         SmallButton(
                           text: "A",
                           color: kPrimaryColor,
+                          press: (){
+                            setState(() {
+                              _filterValue = StatusTypeEnum.Absent.value;
+                            });
+                          },
                         ),
                         SizedBox(width: 5,),
                         SmallButton(
                           text: "All",
                           color: kPrimaryColor,
+                          press: (){
+                            setState(() {
+                              _filterValue = StatusTypeEnum.Attendance.value;
+                            });
+                          },
                         ),
                       ],
                     ),
@@ -209,7 +233,7 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              itemCount: data.studentAttendances.length,
+              itemCount: innerData.studentAttendances.length,
               itemBuilder: (BuildContext itemBuilderContext, int index) {
                 return Container(
                   margin: EdgeInsets.only(right: 20, left: 20),
@@ -229,7 +253,7 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                       Container(
                         height: size.height * 0.06,
                         child: _getLessonListItemView(buildContext,
-                            data.studentAttendances[index], index),
+                            innerData.studentAttendances[index], index),
                       ),
                     ],
                   ),
