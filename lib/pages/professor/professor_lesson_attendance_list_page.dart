@@ -9,6 +9,7 @@ import 'package:education_systems_mobile/data/lesson/section_request.dart';
 import 'package:education_systems_mobile/data/lesson/student_attendance_list_response.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
 import 'package:education_systems_mobile/pages/widget/general_button.dart';
+import 'package:education_systems_mobile/pages/widget/small_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -123,6 +124,18 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                         color: Colors.black,
                         fontSize: 20),
                   ),
+                  SizedBox(height: 5,),
+                  new SizedBox(
+                    height: 5.0,
+                    child: new Center(
+                      child: new Container(
+                        margin: new EdgeInsetsDirectional.only(
+                            start: 1.0, end: 1.0),
+                        height: 2.0,
+                        color: kPrimaryColor,
+                      ),
+                    ),
+                  ),
                   SizedBox(
                     height: 10,
                   ),
@@ -130,16 +143,19 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        ElevatedButton(
-                          child: Text("P"),
+                        SmallButton(
+                          text: "P",
+                          color: kPrimaryColor,
                         ),
-                        GeneralButton(
+                        SizedBox(width: 5,),
+                        SmallButton(
                           text: "A",
-                          press: (){},
+                          color: kPrimaryColor,
                         ),
-                        GeneralButton(
+                        SizedBox(width: 5,),
+                        SmallButton(
                           text: "All",
-                          press: (){},
+                          color: kPrimaryColor,
                         ),
                       ],
                     ),
@@ -147,6 +163,49 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                 ],
               ),
             ),
+            Container(
+              margin: EdgeInsets.only(right: 20, left: 20),
+              child: new Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    width: size.width * 0.28,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Student ID", style: TextStyle(
+                          fontWeight: FontWeight.bold
+                        ),),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: size.width * 0.3,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Name-Surname",style: TextStyle(
+                            fontWeight: FontWeight.bold
+                        ),),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    width: size.width * 0.28,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text("Attendance",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold
+                          ),),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 5,),
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -162,13 +221,13 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                           child: new Container(
                             margin: new EdgeInsetsDirectional.only(
                                 start: 1.0, end: 1.0),
-                            height: 3.0,
+                            height: 2.0,
                             color: kPrimaryColor,
                           ),
                         ),
                       ),
                       Container(
-                        height: size.height * 0.12,
+                        height: size.height * 0.06,
                         child: _getLessonListItemView(buildContext,
                             data.studentAttendances[index], index),
                       ),
@@ -188,10 +247,12 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
+        SizedBox(height: 5,),
         new Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: size.width * 0.3,
+              width: size.width * 0.28,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -209,7 +270,7 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
               ),
             ),
             Container(
-              width: size.width * 0.3,
+              width: size.width * 0.28,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
