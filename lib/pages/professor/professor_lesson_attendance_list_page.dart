@@ -10,6 +10,7 @@ import 'package:education_systems_mobile/data/lesson/section_request.dart';
 import 'package:education_systems_mobile/data/lesson/student_attendance_list_response.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
 import 'package:education_systems_mobile/pages/widget/general_button.dart';
+import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
 import 'package:education_systems_mobile/pages/widget/small_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +108,7 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                   child: Text(NetworkExceptions.getErrorMessage(error))));
         },
       ),
+      bottomNavigationBar: HomeBottomNavigationBar(),
     );
   }
 

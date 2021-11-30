@@ -24,7 +24,7 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
         children: [
           Divider(
             color: kPrimaryColor,
-            height: 10,
+            height: 1,
           ),
           Row(
             children: [
@@ -38,17 +38,17 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
                     padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
                     child: Column(
                       children: <Widget>[
-
                         RichText(
                           text: TextSpan(
                             children: [
                               WidgetSpan(
                                 child: FaIcon(
-                                  FontAwesomeIcons.signOutAlt,
+                                  FontAwesomeIcons.chevronCircleLeft,
                                   color: kPrimaryColor,
-                                  size: 15,
+                                  size: 22,
                                 ),
                               ),
+                              WidgetSpan(child: SizedBox(width: 5,)),
                               TextSpan(
                                 text: 'Back',
                                 style: TextStyle(
@@ -65,9 +65,10 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
                   ),
                 ),
               ),
-              VerticalDivider(
+              Container(
+                width: 1,
+                height: size.height * 0.09,
                 color: kPrimaryColor,
-                width: 10,
               ),
               Container(
                 width: size.width * 0.3,
@@ -79,12 +80,26 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
                     padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
                     child: Column(
                       children: <Widget>[
-                        Text(
-                          'Exit',
-                          style: TextStyle(
-                            color: kPrimaryColor,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              WidgetSpan(
+                                child: FaIcon(
+                                  FontAwesomeIcons.signOutAlt,
+                                  color: kPrimaryColor,
+                                  size: 22,
+                                ),
+                              ),
+                              WidgetSpan(child: SizedBox(width: 5,)),
+                              TextSpan(
+                                text: 'Exit',
+                                style: TextStyle(
+                                  color: kPrimaryColor,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],

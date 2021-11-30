@@ -8,6 +8,7 @@ import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
 import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
+import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -96,6 +97,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
               error: (error) => Center(child: Text(NetworkExceptions.getErrorMessage(error))));
         },
       ),
+      bottomNavigationBar: HomeBottomNavigationBar(),
     );
   }
   _dataWidget(BuildContext buildContext, LessonListResponse data) {

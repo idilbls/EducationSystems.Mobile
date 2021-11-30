@@ -7,6 +7,7 @@ import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart';
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
 import 'package:education_systems_mobile/pages/professor/professor_lesson_attendance_list_page.dart';
+import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -100,6 +101,7 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
                   child: Text(NetworkExceptions.getErrorMessage(error))));
         },
       ),
+      bottomNavigationBar: HomeBottomNavigationBar(),
     );
   }
 
