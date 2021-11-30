@@ -2,6 +2,7 @@ import 'package:education_systems_mobile/bloc/professor_sections/professor_secti
 import 'package:education_systems_mobile/bloc/student_attendance/student_attendance_list_bloc.dart';
 import 'package:education_systems_mobile/core/bloc/result_state.dart';
 import 'package:education_systems_mobile/core/http/network_exceptions.dart';
+import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
 import 'package:education_systems_mobile/data/lesson/enum/status_type_enum.dart';
 import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart';
@@ -42,6 +43,11 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
     _lessonId = widget.lessonId;
     _lessonName = widget.lessonName;
     context.read<StudentAttendanceListBloc>().getAttendance(_lessonId);
+    AuthProvider.of(context).auth.currentUser().then((user) {
+      setState(() {
+        _user = user;
+      });
+    });
     super.didChangeDependencies();
   }
 

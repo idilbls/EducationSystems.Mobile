@@ -1,6 +1,7 @@
 import 'package:education_systems_mobile/bloc/professor_sections/professor_sections_bloc.dart';
 import 'package:education_systems_mobile/core/bloc/result_state.dart';
 import 'package:education_systems_mobile/core/http/network_exceptions.dart';
+import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
 import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart';
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
@@ -35,6 +36,11 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
     _sectionRequest = widget.sectionRequest;
 
     context.read<ProfessorSectionsBloc>().getSections(_sectionRequest);
+    AuthProvider.of(context).auth.currentUser().then((user) {
+      setState(() {
+        _user = user;
+      });
+    });
     super.didChangeDependencies();
   }
 

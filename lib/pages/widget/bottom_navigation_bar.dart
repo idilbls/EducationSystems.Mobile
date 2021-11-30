@@ -21,19 +21,24 @@ class _WelcomeBottomNavigationBarState
       height: 60,
       color: Colors.white,
       child: InkWell(
-        onTap: (){
+        onTap: () {
           SystemNavigator.pop();
         },
         child: Padding(
-          padding: EdgeInsets.only(bottom: 10.0, top:10.0),
+          padding: EdgeInsets.only(bottom: 10.0, top: 10.0),
           child: Column(
             children: <Widget>[
               Divider(
                 color: kPrimaryColor,
                 height: 10,
               ),
-              Text('Exit',
-          style: TextStyle(color: kPrimaryColor, fontSize: 24, fontWeight: FontWeight.bold),),
+              Text(
+                'Exit',
+                style: TextStyle(
+                    color: kPrimaryColor,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold),
+              ),
             ],
           ),
         ),
