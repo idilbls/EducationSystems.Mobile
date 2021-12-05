@@ -328,21 +328,7 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
                   SizedBox(
                     height: 10,
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: kPrimaryColor,
-                    ),
-                    onPressed: () {
-                    },
-                    child: Column(
-                      children: [
-                        Text(
-                          "Attendance",
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buttonView(buildContext,lesson),
                 ],
               ),
             ),
@@ -350,5 +336,41 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
         ),
       ],
     );
+  }
+
+  _buttonView(BuildContext buildContext, Lesson lesson){
+    Color buttonColor;
+    String buttonText;
+    if(lesson.statusType == StatusTypeEnum.Present.value){
+      buttonColor = Colors.green;
+      buttonText = "Present";
+    }
+    else if(lesson.statusType == StatusTypeEnum.Absent.value){
+      buttonColor = Colors.red;
+      buttonText = "Absent";
+    }
+    else if (lesson.statusType == StatusTypeEnum.Attendance.value){
+      buttonColor = kPrimaryColor;
+      buttonText = "Attendance";
+    }
+    return Container(
+      width: 100,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          primary: buttonColor,
+        ),
+        onPressed: () {
+        },
+        child: Column(
+          children: [
+            Text(
+              buttonText,
+              style: TextStyle(fontSize: 12),
+            ),
+          ],
+        ),
+      ),
+    );
+
   }
 }
