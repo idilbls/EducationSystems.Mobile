@@ -144,7 +144,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                         ),
                       ),
                       Container(
-                        height: size.height * 0.12,
+                        height: 60,
                         child: _getLessonListItemView(buildContext, data.lessons[index], index),
                       ),
                     ],
