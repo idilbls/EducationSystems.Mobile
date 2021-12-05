@@ -18,7 +18,7 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Container(
-      height: 60,
+      height: size.height * 0.1,
       color: Colors.white,
       child: Column(
         children: [
