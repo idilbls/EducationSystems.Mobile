@@ -8,6 +8,7 @@ import 'package:education_systems_mobile/core/security/base_auth.dart';
 import 'package:education_systems_mobile/data/lesson/enum/status_type_enum.dart';
 import 'package:education_systems_mobile/data/lesson/lesson_sections_response.dart';
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
+import 'package:education_systems_mobile/data/lesson/user_lesson_map_request.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
 import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -62,6 +63,13 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
 
   void _loadLessonListById(BuildContext buildContext, int userId) async {
     context.read<StudentSectionsBloc>().getSections(_sectionRequest);
+  }
+
+  Future<void> _updateAttendance(BuildContext buildContext, Lesson lesson) async{
+    buildContext.read<StudentSectionsBloc>().repository.updateStudentAttendance(new UserLessonMapRequest(
+      statusType: 2,
+      userLessonMapId: lesson.userLessonMapId
+    )).then((value) => _loadLessonListById(buildContext, lesson.userId));
   }
 
 
@@ -360,6 +368,8 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
           primary: buttonColor,
         ),
         onPressed: () {
+          if(lesson.statusType == StatusTypeEnum.Attendance.value){
+          _updateAttendance(buildContext, lesson);}
         },
         child: Column(
           children: [
