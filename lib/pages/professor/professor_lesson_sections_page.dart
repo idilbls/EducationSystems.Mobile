@@ -207,6 +207,7 @@ class _ProfessorLessonSectionsPageState extends State<ProfessorLessonSectionsPag
                       Navigator.push(context, MaterialPageRoute(builder: (context) => ProfessorLessonAttendanceListPage(
                         lessonId: lesson.id,
                         lessonName: lesson.code +" - " + lesson.title,
+                        lessonIsActive: lesson.isActive
                       )));
                     },
                     child: Column(

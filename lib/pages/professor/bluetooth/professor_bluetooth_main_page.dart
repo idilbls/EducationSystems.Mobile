@@ -1,7 +1,10 @@
 
 
 import 'dart:async';
-
+import 'package:education_systems_mobile/bloc/professor_sections/professor_sections_bloc.dart';
+import 'package:education_systems_mobile/data/auth/local_address_request.dart';
+import 'package:education_systems_mobile/pages/professor/professor_lesson_attendance_list_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
 import 'package:education_systems_mobile/pages/student/bluetooth/bluetooth_discovery_page.dart';
@@ -13,9 +16,11 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfessorBluetoothMainPage extends StatefulWidget {
-  ProfessorBluetoothMainPage({Key key, this.userLessonMapId}) : super(key: key);
+  ProfessorBluetoothMainPage({Key key, this.lessonId,this.lessonName, this.isActive}) : super(key: key);
   final String routeName = "/bluetooth_main";
-  final int userLessonMapId;
+  final int lessonId;
+  final String lessonName;
+  final bool isActive;
 
   @override
   _ProfessorBluetoothMainPageState createState() => _ProfessorBluetoothMainPageState();
@@ -27,6 +32,9 @@ class _ProfessorBluetoothMainPageState extends State<ProfessorBluetoothMainPage>
 
   String _address = "...";
   String _name = "...";
+  int _lessonId;
+  String _lessonName;
+  bool _isActive;
 
   Timer _discoverableTimeoutTimer;
   int _discoverableTimeoutSecondsLeft = 0;
@@ -53,6 +61,10 @@ class _ProfessorBluetoothMainPageState extends State<ProfessorBluetoothMainPage>
       FlutterBluetoothSerial.instance.address.then((address) {
         setState(() {
           _address = address;
+          context.read<ProfessorSectionsBloc>().repository.updateLocalAddress(new LocalAddressRequest(
+              userId: _user.id,
+              localAddress: _address
+          ));
         });
       });
     });
@@ -79,6 +91,9 @@ class _ProfessorBluetoothMainPageState extends State<ProfessorBluetoothMainPage>
 
   @override
   void didChangeDependencies() {
+    _lessonId = widget.lessonId;
+    _lessonName = widget.lessonName;
+    _isActive = widget.isActive;
     AuthProvider.of(context).auth.currentUser().then((user) {
       setState(() {
         _user = user;
@@ -146,6 +161,15 @@ class _ProfessorBluetoothMainPageState extends State<ProfessorBluetoothMainPage>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 10,),
+            Text(
+              "Öğrencilerin derse katılabilmesi için lütfen bluetoothunuzu açınız!",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                  fontSize: 16),
+            ),
             SwitchListTile(
               title: const Text('Enable Bluetooth'),
               value: _bluetoothState.isEnabled,
@@ -153,8 +177,15 @@ class _ProfessorBluetoothMainPageState extends State<ProfessorBluetoothMainPage>
                 // Do the request and update with the true value then
                 future() async {
                   // async lambda seems to not working
-                  if (value)
-                    await FlutterBluetoothSerial.instance.requestEnable();
+                  if (value){
+                    await FlutterBluetoothSerial.instance.requestEnable().then((value){
+                      buildContext.read<ProfessorSectionsBloc>().repository.updateLocalAddress(new LocalAddressRequest(
+                        userId: _user.id,
+                        localAddress: _address
+                      ));
+                    });
+                  }
+
                   else
                     await FlutterBluetoothSerial.instance.requestDisable();
                 }
@@ -186,22 +217,18 @@ class _ProfessorBluetoothMainPageState extends State<ProfessorBluetoothMainPage>
 
             ListTile(
               title: ElevatedButton(
-                  child: const Text('Explore discovered devices'),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.red),
+                  ),
+                  child: const Text('Finish Lesson', style: TextStyle(fontSize: 16),),
                   onPressed: () async {
-                    final BluetoothDevice selectedDevice =
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return BluetoothDiscoveryPage(userLessonMapId: widget.userLessonMapId);
-                        },
-                      ),
-                    );
-
-                    if (selectedDevice != null) {
-                      print('Discovery -> selected ' + selectedDevice.address);
-                    } else {
-                      print('Discovery -> no device selected');
-                    }
+                    context.read<ProfessorSectionsBloc>().repository.finishLesson(_lessonId).then((value){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ProfessorLessonAttendanceListPage(
+                        lessonId: _lessonId,
+                        lessonName: _lessonName,
+                        lessonIsActive: _isActive
+                      )));
+                    });
                   }),
             ),
           ],

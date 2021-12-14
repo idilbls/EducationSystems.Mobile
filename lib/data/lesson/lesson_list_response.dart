@@ -31,6 +31,7 @@ class Lesson {
     this.code,
     this.date,
     this.professorId,
+    this.isActive
   });
 
   int id;
@@ -38,6 +39,7 @@ class Lesson {
   String code;
   DateTime date;
   int professorId;
+  bool isActive;
 
   factory Lesson.fromJson(Map<String, dynamic> json) => Lesson(
     id: json["id"],
@@ -45,6 +47,7 @@ class Lesson {
     code: json["code"],
     date: DateTime.parse(json["date"]),
     professorId: json["professorId"],
+    isActive: json["isActive"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -53,5 +56,6 @@ class Lesson {
     "code": code,
     "date": date.toIso8601String(),
     "professorId": professorId,
+    "isActive":isActive
   };
 }

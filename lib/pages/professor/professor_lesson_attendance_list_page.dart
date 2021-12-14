@@ -9,6 +9,8 @@ import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart';
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
 import 'package:education_systems_mobile/data/lesson/student_attendance_list_response.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
+import 'package:education_systems_mobile/pages/professor/bluetooth/professor_bluetooth_main_page.dart';
+import 'package:education_systems_mobile/pages/professor/start_lesson_page.dart';
 import 'package:education_systems_mobile/pages/widget/general_button.dart';
 import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
 import 'package:education_systems_mobile/pages/widget/small_button.dart';
@@ -19,11 +21,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class ProfessorLessonAttendanceListPage extends StatefulWidget {
-  ProfessorLessonAttendanceListPage({Key key, this.lessonId, this.lessonName})
+  ProfessorLessonAttendanceListPage({Key key, this.lessonId, this.lessonName,this.lessonIsActive})
       : super(key: key);
   final String routeName = "/professor_lesson_attendance_list";
   final int lessonId;
   final String lessonName;
+  final bool lessonIsActive;
 
   @override
   _ProfessorLessonAttendanceListPageState createState() =>
@@ -35,6 +38,7 @@ class _ProfessorLessonAttendanceListPageState
   BaseUser _user;
   int _lessonId;
   String _lessonName;
+  bool _lessonIsActive;
   int _filterValue = StatusTypeEnum.Attendance.value;
 
   @override
@@ -44,6 +48,7 @@ class _ProfessorLessonAttendanceListPageState
 
   @override
   void didChangeDependencies() {
+    _lessonIsActive= widget.lessonIsActive;
     _lessonId = widget.lessonId;
     _lessonName = widget.lessonName;
     context.read<StudentAttendanceListBloc>().getAttendance(_lessonId);
@@ -203,14 +208,7 @@ class _ProfessorLessonAttendanceListPageState
                         SizedBox(
                           width: 5,
                         ),
-                        IconButton(
-                          onPressed: null,
-                          icon: FaIcon(
-                            FontAwesomeIcons.bluetooth,
-                            color: Colors.green,
-                            size: 30,
-                          ),
-                        ),
+                        _widgetBluetoothButton(buildContext),
                       ],
                     ),
                   ),
@@ -296,6 +294,31 @@ class _ProfessorLessonAttendanceListPageState
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  _widgetBluetoothButton(BuildContext buildContext){
+    return IconButton(
+      onPressed: (){
+        if(!_lessonIsActive){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => StartLessonPage(
+            lessonId: _lessonId,
+            lessonName: _lessonName,
+            isActive: _lessonIsActive,
+          )));
+        }else{
+          Navigator.push(context, MaterialPageRoute(builder: (context) => ProfessorBluetoothMainPage(
+            lessonName: _lessonName,
+            lessonId: _lessonId,
+            isActive: _lessonIsActive,
+          )));
+        }
+      },
+      icon: FaIcon(
+        FontAwesomeIcons.bluetooth,
+        color: Colors.green,
+        size: 30,
       ),
     );
   }
