@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:education_systems_mobile/bloc/student_sections/student_sections_bloc.dart';
+import 'package:education_systems_mobile/core/http/response.dart';
 import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
+import 'package:education_systems_mobile/data/auth/user.dart';
 import 'package:education_systems_mobile/data/lesson/lesson_sections_response.dart';
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
 import 'package:education_systems_mobile/data/lesson/user_lesson_map_request.dart';
@@ -13,10 +15,11 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BluetoothDiscoveryPage extends StatefulWidget {
-  BluetoothDiscoveryPage({Key key, this.userLessonMapId, this.start = true})
+  BluetoothDiscoveryPage({Key key, this.userLessonMapId, this.professorId, this.start = true})
       : super(key: key);
   final String routeName = "/bluetooth_discovery";
   final int userLessonMapId;
+  final int professorId;
   final bool start;
 
   @override
@@ -25,7 +28,7 @@ class BluetoothDiscoveryPage extends StatefulWidget {
 
 class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
   BaseUser _user;
-  SectionRequest _sectionRequest = new SectionRequest();
+  User currentProfessor;
   StreamSubscription<BluetoothDiscoveryResult> _streamSubscription;
   List<BluetoothDiscoveryResult> results =
       List<BluetoothDiscoveryResult>.empty(growable: true);
@@ -88,17 +91,24 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
     _streamSubscription?.cancel();
     super.dispose();
   }
+  Future<void> _getUser(BuildContext buildContext, int userId) async{
+    var auth = AuthProvider.of(context).auth;
+    Response response = await auth.getUser(userId);
+    if (response.success && response.result != null) {
+      setState(() {
+        currentProfessor = response.result;
+      });
+    }
+  }
 
-  Future<void> _updateAttendance(BuildContext buildContext, Lesson lesson) async{
+  Future<void> _updateAttendance(BuildContext buildContext) async{
+
     buildContext.read<StudentSectionsBloc>().repository.updateStudentAttendance(new UserLessonMapRequest(
         statusType: 2,
-        userLessonMapId: lesson.userLessonMapId
-    )).then((value) => _loadLessonListById(buildContext, lesson.userId));
+        userLessonMapId: widget.userLessonMapId
+    )).then((value) => null);
   }
 
-  void _loadLessonListById(BuildContext buildContext, int userId) async {
-    context.read<StudentSectionsBloc>().getSections(_sectionRequest);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -149,53 +159,62 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
             Navigator.of(context).pop(result.device);
           },
           onLongPress: () async {
-            try {
-              bool bonded = false;
-              if (device.isBonded) {
-                print('Unbonding from ${device.address}...');
-                await FlutterBluetoothSerial.instance
-                    .removeDeviceBondWithAddress(address);
-                print('Unbonding from ${device.address} has succed');
-              } else {
-                print('Bonding with ${device.address}...');
-                bonded = (await FlutterBluetoothSerial.instance
-                    .bondDeviceAtAddress(address));
-                print(
-                    'Bonding with ${device.address} has ${bonded ? 'succed' : 'failed'}.');
-              }
-              if(mounted){
-                setState(() {
-                  results[results.indexOf(result)] = BluetoothDiscoveryResult(
-                      device: BluetoothDevice(
-                        name: device.name ?? '',
-                        address: address,
-                        type: device.type,
-                        bondState: bonded
-                            ? BluetoothBondState.bonded
-                            : BluetoothBondState.none,
-                      ),
-                      rssi: result.rssi);
-                });
-              }
-            } catch (ex) {
-              showDialog(
-                context: context,
-                builder: (BuildContext buildContext) {
-                  return AlertDialog(
-                    title: const Text('Error occured while bonding'),
-                    content: Text("${ex.toString()}"),
-                    actions: <Widget>[
-                      new TextButton(
-                        child: new Text("Close"),
-                        onPressed: () {
-                          Navigator.of(buildContext).pop();
-                        },
-                      ),
-                    ],
+            _getUser(buildContext,widget.professorId).then((value)async{
+              if(currentProfessor.localAddress == device.address) {
+                try {
+                  bool bonded = false;
+                  if (device.isBonded) {
+                    print('Unbonding from ${device.address}...');
+                    await FlutterBluetoothSerial.instance
+                        .removeDeviceBondWithAddress(address);
+                    print('Unbonding from ${device.address} has succed');
+                  } else {
+                    print('Bonding with ${device.address}...');
+                    bonded = (await FlutterBluetoothSerial.instance
+                        .bondDeviceAtAddress(address));
+                    print(
+                        'Bonding with ${device.address} has ${bonded ? 'succed' : 'failed'}.');
+                  }
+                  if(mounted){
+                    setState(() {
+                      results[results.indexOf(result)] = BluetoothDiscoveryResult(
+                          device: BluetoothDevice(
+                            name: device.name ?? '',
+                            address: address,
+                            type: device.type,
+                            bondState: bonded
+                                ? BluetoothBondState.bonded
+                                : BluetoothBondState.none,
+                          ),
+                          rssi: result.rssi);
+                      _updateAttendance(buildContext);
+                    });
+                  }
+                } catch (ex) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext buildContext) {
+                      return AlertDialog(
+                        title: const Text('Error occured while bonding'),
+                        content: Text("${ex.toString()}"),
+                        actions: <Widget>[
+                          new TextButton(
+                            child: new Text("Close"),
+                            onPressed: () {
+                              Navigator.of(buildContext).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
                   );
-                },
-              );
-            }
+                }
+              }
+              else{
+                //sadece dersin hocasının cihazına bağlanabilirsiniz!
+              }
+            });
+
           },
         );
       },

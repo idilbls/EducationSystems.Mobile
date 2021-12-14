@@ -1,6 +1,7 @@
 import 'package:education_systems_mobile/bloc/student_sections/student_sections_bloc.dart';
 import 'package:education_systems_mobile/core/bloc/result_state.dart';
 import 'package:education_systems_mobile/core/http/network_exceptions.dart';
+import 'package:education_systems_mobile/core/http/response.dart';
 import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
 import 'package:education_systems_mobile/data/lesson/enum/status_type_enum.dart';
@@ -10,6 +11,7 @@ import 'package:education_systems_mobile/data/lesson/user_lesson_map_request.dar
 import 'package:education_systems_mobile/pages/constants.dart';
 import 'package:education_systems_mobile/pages/student/bluetooth/bluetooth_main_page.dart';
 import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
+import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart' as lesson_res;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,6 +31,7 @@ class StudentLessonSectionsPage extends StatefulWidget {
 class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
   BaseUser _user;
   SectionRequest _sectionRequest = new SectionRequest();
+  lesson_res.Lesson currentLesson;
 
   Map<String, double> dataMap = {
     "Present": 0,
@@ -71,6 +74,16 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
     )).then((value) => _loadLessonListById(buildContext, lesson.userId));
   }
 
+  Future<void> _getLesson(BuildContext buildContext, Lesson lesson) async{
+    var result = await context.read<StudentSectionsBloc>().repository.getLessonById(lesson.lessonId);
+    result.when(success: (lesson_res.Lesson data){
+      currentLesson = data;
+    }, failure: (NetworkExceptions exceptions){
+      var response =
+      new Response(success: false, error: new ResponseError(code: 0, message: NetworkExceptions.getErrorMessage(exceptions)));
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +111,7 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
                   ),
                   SizedBox(
                     width: 10,
-                  ),
-                  FaIcon(
+                  ), FaIcon(
                     FontAwesomeIcons.userCircle,
                     color: Colors.white,
                     size: 30,
@@ -369,9 +381,17 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
         onPressed: () {
           if(lesson.statusType == StatusTypeEnum.Attendance.value){
           //_updateAttendance(buildContext, lesson);
-            Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothMainPage(
-              userLessonMapId: lesson.userLessonMapId,
-            )));
+            _getLesson(buildContext, lesson).then((value) {
+              if(currentLesson.isActive){
+                Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothMainPage(
+                  userLessonMapId: lesson.userLessonMapId,
+                  professorId: lesson.professorId,
+                )));
+              }
+              else{
+                //ders henüz başlamadı error
+              }
+            });
           }
         },
         child: Column(

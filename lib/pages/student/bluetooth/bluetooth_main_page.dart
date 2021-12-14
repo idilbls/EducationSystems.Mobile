@@ -13,9 +13,10 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BluetoothMainPage extends StatefulWidget {
-  BluetoothMainPage({Key key, this.userLessonMapId}) : super(key: key);
+  BluetoothMainPage({Key key, this.userLessonMapId, this.professorId}) : super(key: key);
   final String routeName = "/bluetooth_main";
   final int userLessonMapId;
+  final int professorId;
 
   @override
   _BluetoothMainPageState createState() => _BluetoothMainPageState();
@@ -192,7 +193,10 @@ class _BluetoothMainPageState extends State<BluetoothMainPage> {
                     await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
-                          return BluetoothDiscoveryPage(userLessonMapId: widget.userLessonMapId);
+                          return BluetoothDiscoveryPage(
+                            userLessonMapId: widget.userLessonMapId,
+                            professorId: widget.professorId,
+                          );
                         },
                       ),
                     );

@@ -32,6 +32,8 @@ class Lesson {
     this.lessonDate,
     this.statusType,
     this.userLessonMapId,
+    this.lessonId,
+    this.professorId
   });
 
   int userId;
@@ -40,6 +42,8 @@ class Lesson {
   DateTime lessonDate;
   int statusType;
   int userLessonMapId;
+  int lessonId;
+  int professorId;
 
   factory Lesson.fromJson(Map<String, dynamic> json) => Lesson(
     userId: json["userId"],
@@ -47,7 +51,9 @@ class Lesson {
     lessonCode: json["lessonCode"],
     lessonDate: DateTime.parse(json["lessonDate"]),
     statusType: json["statusType"],
-    userLessonMapId: json["userLessonMapId"]
+    userLessonMapId: json["userLessonMapId"],
+    lessonId: json["lessonId"],
+    professorId: json["professorId"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -57,5 +63,7 @@ class Lesson {
     "lessonDate": lessonDate.toIso8601String(),
     "statusType": statusType,
     "userLessonMapId": userLessonMapId,
+    "lessonId":lessonId,
+    "professorId":professorId
   };
 }
