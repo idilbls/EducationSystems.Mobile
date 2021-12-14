@@ -127,7 +127,7 @@ class _ProfessorBluetoothMainPageState extends State<ProfessorBluetoothMainPage>
               SizedBox(height: 10,),
               Row(
                 children: [
-                  Text(_user == null ? '' : _user.number,
+                  Text(_user == null ? '' : _user.name,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -226,7 +226,7 @@ class _ProfessorBluetoothMainPageState extends State<ProfessorBluetoothMainPage>
                       Navigator.push(context, MaterialPageRoute(builder: (context) => ProfessorLessonAttendanceListPage(
                         lessonId: _lessonId,
                         lessonName: _lessonName,
-                        lessonIsActive: _isActive
+                        lessonIsActive: _isActive = false
                       )));
                     });
                   }),

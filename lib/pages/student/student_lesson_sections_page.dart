@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:education_systems_mobile/bloc/student_sections/student_sections_bloc.dart';
 import 'package:education_systems_mobile/core/bloc/result_state.dart';
 import 'package:education_systems_mobile/core/http/network_exceptions.dart';
@@ -374,7 +372,6 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
             Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothMainPage(
               userLessonMapId: lesson.userLessonMapId,
             )));
-
           }
         },
         child: Column(

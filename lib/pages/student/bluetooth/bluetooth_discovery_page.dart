@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'package:education_systems_mobile/bloc/student_sections/student_sections_bloc.dart';
 import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
+import 'package:education_systems_mobile/data/lesson/lesson_sections_response.dart';
+import 'package:education_systems_mobile/data/lesson/section_request.dart';
+import 'package:education_systems_mobile/data/lesson/user_lesson_map_request.dart';
 import 'package:education_systems_mobile/pages/student/bluetooth/bluetooth_device_list_entry.dart';
 import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BluetoothDiscoveryPage extends StatefulWidget {
   BluetoothDiscoveryPage({Key key, this.userLessonMapId, this.start = true})
@@ -20,6 +25,7 @@ class BluetoothDiscoveryPage extends StatefulWidget {
 
 class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
   BaseUser _user;
+  SectionRequest _sectionRequest = new SectionRequest();
   StreamSubscription<BluetoothDiscoveryResult> _streamSubscription;
   List<BluetoothDiscoveryResult> results =
       List<BluetoothDiscoveryResult>.empty(growable: true);
@@ -81,6 +87,17 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
     // Avoid memory leak (`setState` after dispose) and cancel discovery
     _streamSubscription?.cancel();
     super.dispose();
+  }
+
+  Future<void> _updateAttendance(BuildContext buildContext, Lesson lesson) async{
+    buildContext.read<StudentSectionsBloc>().repository.updateStudentAttendance(new UserLessonMapRequest(
+        statusType: 2,
+        userLessonMapId: lesson.userLessonMapId
+    )).then((value) => _loadLessonListById(buildContext, lesson.userId));
+  }
+
+  void _loadLessonListById(BuildContext buildContext, int userId) async {
+    context.read<StudentSectionsBloc>().getSections(_sectionRequest);
   }
 
   @override
