@@ -4,7 +4,7 @@ import 'dart:async';
 
 import 'package:education_systems_mobile/core/security/auth_provider.dart';
 import 'package:education_systems_mobile/core/security/base_auth.dart';
-import 'package:education_systems_mobile/pages/bluetooth/bluetooth_discovery_page.dart';
+import 'package:education_systems_mobile/pages/student/bluetooth/bluetooth_discovery_page.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
 import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';

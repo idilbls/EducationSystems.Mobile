@@ -18,6 +18,7 @@ class User extends BaseUser {
     this.surname,
     this.number,
     this.type,
+    this.LocalAddress
   });
 
   int id;
@@ -26,6 +27,7 @@ class User extends BaseUser {
   String surname;
   String number;
   int type;
+  String LocalAddress;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
     id: json["id"],
@@ -34,6 +36,7 @@ class User extends BaseUser {
     surname: json["surname"],
     number: json["number"],
     type: json["type"],
+    LocalAddress: json["LocalAddress"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -43,5 +46,6 @@ class User extends BaseUser {
     "surname": surname,
     "number": number,
     "type": type,
+    "LocalAddress": LocalAddress
   };
 }

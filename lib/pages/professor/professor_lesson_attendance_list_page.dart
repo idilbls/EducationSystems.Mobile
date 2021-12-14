@@ -19,16 +19,19 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class ProfessorLessonAttendanceListPage extends StatefulWidget {
-  ProfessorLessonAttendanceListPage({Key key, this.lessonId, this.lessonName}) : super(key: key);
+  ProfessorLessonAttendanceListPage({Key key, this.lessonId, this.lessonName})
+      : super(key: key);
   final String routeName = "/professor_lesson_attendance_list";
   final int lessonId;
   final String lessonName;
 
   @override
-  _ProfessorLessonAttendanceListPageState createState() => _ProfessorLessonAttendanceListPageState();
+  _ProfessorLessonAttendanceListPageState createState() =>
+      _ProfessorLessonAttendanceListPageState();
 }
 
-class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAttendanceListPage> {
+class _ProfessorLessonAttendanceListPageState
+    extends State<ProfessorLessonAttendanceListPage> {
   BaseUser _user;
   int _lessonId;
   String _lessonName;
@@ -55,7 +58,6 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
   void _loadLessonListById(BuildContext buildContext, int userId) async {
     context.read<StudentAttendanceListBloc>().getAttendance(_lessonId);
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -98,8 +100,10 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
           ),
         ],
       ),
-      body: BlocBuilder<StudentAttendanceListBloc, ResultState<StudentAttendanceListResponse>>(
-        builder: (BuildContext context, ResultState<StudentAttendanceListResponse> state) {
+      body: BlocBuilder<StudentAttendanceListBloc,
+          ResultState<StudentAttendanceListResponse>>(
+        builder: (BuildContext context,
+            ResultState<StudentAttendanceListResponse> state) {
           return state.when(
               idle: () => Container(),
               loading: () => Center(child: CircularProgressIndicator()),
@@ -115,11 +119,12 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
   _dataWidget(BuildContext buildContext, StudentAttendanceListResponse data) {
     Size size = MediaQuery.of(context).size;
     StudentAttendanceListResponse innerData = data;
-    if(_filterValue == StatusTypeEnum.Attendance.value){
+    if (_filterValue == StatusTypeEnum.Attendance.value) {
       innerData = data;
-    }
-    else{
-      var values = data.studentAttendances.where((e) => e.statusType == _filterValue).toList();
+    } else {
+      var values = data.studentAttendances
+          .where((e) => e.statusType == _filterValue)
+          .toList();
       innerData = new StudentAttendanceListResponse(studentAttendances: values);
     }
     return SingleChildScrollView(
@@ -141,7 +146,9 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                         color: Colors.black,
                         fontSize: 20),
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   new SizedBox(
                     height: 5.0,
                     child: new Center(
@@ -163,31 +170,46 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                         SmallButton(
                           text: "P",
                           color: kPrimaryColor,
-                          press: (){
+                          press: () {
                             setState(() {
                               _filterValue = StatusTypeEnum.Present.value;
                             });
                           },
                         ),
-                        SizedBox(width: 5,),
+                        SizedBox(
+                          width: 5,
+                        ),
                         SmallButton(
                           text: "A",
                           color: kPrimaryColor,
-                          press: (){
+                          press: () {
                             setState(() {
                               _filterValue = StatusTypeEnum.Absent.value;
                             });
                           },
                         ),
-                        SizedBox(width: 5,),
+                        SizedBox(
+                          width: 5,
+                        ),
                         SmallButton(
                           text: "All",
                           color: kPrimaryColor,
-                          press: (){
+                          press: () {
                             setState(() {
                               _filterValue = StatusTypeEnum.Attendance.value;
                             });
                           },
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        IconButton(
+                          onPressed: null,
+                          icon: FaIcon(
+                            FontAwesomeIcons.bluetooth,
+                            color: Colors.green,
+                            size: 30,
+                          ),
                         ),
                       ],
                     ),
@@ -205,9 +227,10 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Student ID", style: TextStyle(
-                          fontWeight: FontWeight.bold
-                        ),),
+                        Text(
+                          "Student ID",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                   ),
@@ -216,9 +239,10 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Name-Surname",style: TextStyle(
-                            fontWeight: FontWeight.bold
-                        ),),
+                        Text(
+                          "Name-Surname",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                   ),
@@ -227,17 +251,19 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Attendance",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold
-                          ),),
+                        Text(
+                          "Attendance",
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(
+              height: 5,
+            ),
             ListView.builder(
               physics: NeverScrollableScrollPhysics(),
               shrinkWrap: true,
@@ -274,12 +300,14 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
     );
   }
 
-  _getLessonListItemView(
-      BuildContext buildContext, StudentAttendance studentAttendance, int itemIndex) {
+  _getLessonListItemView(BuildContext buildContext,
+      StudentAttendance studentAttendance, int itemIndex) {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
-        SizedBox(height: 5,),
+        SizedBox(
+          height: 5,
+        ),
         new Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -306,8 +334,13 @@ class _ProfessorLessonAttendanceListPageState extends State<ProfessorLessonAtten
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(studentAttendance.statusType == StatusTypeEnum.Attendance.value ? "Attendance":
-                  studentAttendance.statusType == StatusTypeEnum.Present.value ? "Present " : "Absent"),
+                  Text(studentAttendance.statusType ==
+                          StatusTypeEnum.Attendance.value
+                      ? "Attendance"
+                      : studentAttendance.statusType ==
+                              StatusTypeEnum.Present.value
+                          ? "Present "
+                          : "Absent"),
                 ],
               ),
             ),

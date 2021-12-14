@@ -28,7 +28,7 @@ class AuthRepository implements BaseRepository {
 
   Future<ApiResult<User>> getUserById(int id) async {
     try {
-      final response = await apiProvider.post("Users/getUserById", data: id);
+      final response = await apiProvider.post("Users/get_user_by_id", data: id);
       User apiResponse = User.fromJson(response);
       if (apiResponse.username != null)
         return ApiResult.success(data: apiResponse);

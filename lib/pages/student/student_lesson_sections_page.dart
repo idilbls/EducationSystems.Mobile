@@ -9,8 +9,8 @@ import 'package:education_systems_mobile/data/lesson/enum/status_type_enum.dart'
 import 'package:education_systems_mobile/data/lesson/lesson_sections_response.dart';
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
 import 'package:education_systems_mobile/data/lesson/user_lesson_map_request.dart';
-import 'package:education_systems_mobile/pages/bluetooth/bluetooth_main_page.dart';
 import 'package:education_systems_mobile/pages/constants.dart';
+import 'package:education_systems_mobile/pages/student/bluetooth/bluetooth_main_page.dart';
 import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
