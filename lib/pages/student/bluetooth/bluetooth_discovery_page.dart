@@ -13,6 +13,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BluetoothDiscoveryPage extends StatefulWidget {
   BluetoothDiscoveryPage({Key key, this.userLessonMapId, this.professorId, this.start = true})
@@ -33,6 +34,7 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
   List<BluetoothDiscoveryResult> results =
       List<BluetoothDiscoveryResult>.empty(growable: true);
   bool isDiscovering = false;
+  FToast fToast;
 
   _BluetoothDiscoveryPageState();
 
@@ -43,6 +45,8 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
     if (isDiscovering) {
       _startDiscovery();
     }
+    fToast = FToast();
+    fToast.init(context);
   }
 
   void _restartDiscovery() {
@@ -212,6 +216,11 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
               }
               else{
                 //sadece dersin hocasının cihazına bağlanabilirsiniz!
+                fToast.showToast(
+                  child: toast,
+                  toastDuration: Duration(seconds: 3),
+                  fadeDuration: 2000,
+                );
               }
             });
 
@@ -221,3 +230,12 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
     );
   }
 }
+
+Widget toast = Container(
+  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(25.0),
+    color: Colors.red,
+  ),
+  child: Text("Sadece dersin hocasının cihazına bağlanabilirsiniz!", style: TextStyle(color: Colors.white),),
+);

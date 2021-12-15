@@ -15,6 +15,7 @@ import 'package:education_systems_mobile/data/lesson/lesson_list_response.dart' 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -32,6 +33,7 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
   BaseUser _user;
   SectionRequest _sectionRequest = new SectionRequest();
   lesson_res.Lesson currentLesson;
+  FToast fToast;
 
   Map<String, double> dataMap = {
     "Present": 0,
@@ -48,6 +50,8 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
   @override
   void initState() {
     super.initState();
+    fToast = FToast();
+    fToast.init(context);
   }
 
   @override
@@ -390,6 +394,11 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
               }
               else{
                 //ders henüz başlamadı error
+                fToast.showToast(
+                  child: toast,
+                  toastDuration: Duration(seconds: 3),
+                  fadeDuration: 2000,
+                );
               }
             });
           }
@@ -404,6 +413,14 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
         ),
       ),
     );
-
   }
 }
+
+Widget toast = Container(
+  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(25.0),
+    color: Colors.red,
+  ),
+  child: Text("Ders henüz başlatılmadı!", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+);

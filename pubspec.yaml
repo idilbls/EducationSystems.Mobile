@@ -39,6 +39,7 @@ dependencies:
   font_awesome_flutter: ^8.10.0
   pie_chart: ^5.1.0
   flutter_bluetooth_serial:
+  fluttertoast: ^8.0.7
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
