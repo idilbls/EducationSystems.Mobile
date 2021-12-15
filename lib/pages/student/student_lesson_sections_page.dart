@@ -390,6 +390,7 @@ class _StudentLessonSectionsPageState extends State<StudentLessonSectionsPage> {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothMainPage(
                   userLessonMapId: lesson.userLessonMapId,
                   professorId: lesson.professorId,
+                  lessonCode: lesson.lessonCode,
                 )));
               }
               else{

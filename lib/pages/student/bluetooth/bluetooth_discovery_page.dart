@@ -8,6 +8,7 @@ import 'package:education_systems_mobile/data/lesson/lesson_sections_response.da
 import 'package:education_systems_mobile/data/lesson/section_request.dart';
 import 'package:education_systems_mobile/data/lesson/user_lesson_map_request.dart';
 import 'package:education_systems_mobile/pages/student/bluetooth/bluetooth_device_list_entry.dart';
+import 'package:education_systems_mobile/pages/student/student_lesson_sections_page.dart';
 import 'package:education_systems_mobile/pages/widget/home_bottom_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,12 +17,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class BluetoothDiscoveryPage extends StatefulWidget {
-  BluetoothDiscoveryPage({Key key, this.userLessonMapId, this.professorId, this.start = true})
+  BluetoothDiscoveryPage({Key key, this.userLessonMapId, this.professorId, this.start = true, this.lessonCode})
       : super(key: key);
   final String routeName = "/bluetooth_discovery";
   final int userLessonMapId;
   final int professorId;
   final bool start;
+  final String lessonCode;
 
   @override
   _BluetoothDiscoveryPageState createState() => _BluetoothDiscoveryPageState();
@@ -110,7 +112,14 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
     buildContext.read<StudentSectionsBloc>().repository.updateStudentAttendance(new UserLessonMapRequest(
         statusType: 2,
         userLessonMapId: widget.userLessonMapId
-    )).then((value) => null);
+    )).then((value) {
+      Navigator.push(context, MaterialPageRoute(builder: (context) => StudentLessonSectionsPage(
+        sectionRequest: SectionRequest(
+            userId: _user.id,
+            lessonCode: widget.lessonCode
+        ),
+      )));
+    });
   }
 
 
@@ -164,7 +173,7 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
           },
           onLongPress: () async {
             _getUser(buildContext,widget.professorId).then((value)async{
-              if(currentProfessor.localAddress == device.address) {
+              if(currentProfessor.localAddress != device.address) {
                 try {
                   bool bonded = false;
                   if (device.isBonded) {

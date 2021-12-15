@@ -1,5 +1,3 @@
-
-
 import 'dart:async';
 
 import 'package:education_systems_mobile/core/security/auth_provider.dart';
@@ -13,10 +11,12 @@ import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BluetoothMainPage extends StatefulWidget {
-  BluetoothMainPage({Key key, this.userLessonMapId, this.professorId}) : super(key: key);
+  BluetoothMainPage({Key key, this.userLessonMapId, this.professorId, this.lessonCode})
+      : super(key: key);
   final String routeName = "/bluetooth_main";
   final int userLessonMapId;
   final int professorId;
+  final String lessonCode;
 
   @override
   _BluetoothMainPageState createState() => _BluetoothMainPageState();
@@ -32,6 +32,7 @@ class _BluetoothMainPageState extends State<BluetoothMainPage> {
   Timer _discoverableTimeoutTimer;
   int _discoverableTimeoutSecondsLeft = 0;
   bool _autoAcceptPairingRequests = false;
+
   @override
   void initState() {
     super.initState();
@@ -59,9 +60,11 @@ class _BluetoothMainPageState extends State<BluetoothMainPage> {
     });
 
     FlutterBluetoothSerial.instance.name.then((name) {
-      setState(() {
-        _name = name;
-      });
+      if (mounted) {
+        setState(() {
+          _name = name;
+        });
+      }
     });
 
     // Listen for futher state changes
@@ -96,29 +99,30 @@ class _BluetoothMainPageState extends State<BluetoothMainPage> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
         backgroundColor: kPrimaryColor,
-        title: Text('Attandance',
-          style: TextStyle(
-              color: Colors.white,
-              fontSize: 16
-          ),),
+        title: Text(
+          'Attandance',
+          style: TextStyle(color: Colors.white, fontSize: 16),
+        ),
         actions: [
           Column(
             children: [
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
               Row(
                 children: [
-                  Text(_user == null ? '' : _user.number,
+                  Text(
+                    _user == null ? '' : _user.number,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
-                        fontWeight: FontWeight.w500
-                    ),),
+                        fontWeight: FontWeight.w500),
+                  ),
                   SizedBox(
                     width: 10,
                   ),
@@ -140,6 +144,7 @@ class _BluetoothMainPageState extends State<BluetoothMainPage> {
       bottomNavigationBar: HomeBottomNavigationBar(),
     );
   }
+
   _dataWidget(BuildContext buildContext) {
     Size size = MediaQuery.of(context).size;
     return SingleChildScrollView(
@@ -184,18 +189,18 @@ class _BluetoothMainPageState extends State<BluetoothMainPage> {
               subtitle: Text(_name),
               onLongPress: null,
             ),
-
             ListTile(
               title: ElevatedButton(
                   child: const Text('Explore discovered devices'),
                   onPressed: () async {
                     final BluetoothDevice selectedDevice =
-                    await Navigator.of(context).push(
+                        await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) {
                           return BluetoothDiscoveryPage(
                             userLessonMapId: widget.userLessonMapId,
                             professorId: widget.professorId,
+                            lessonCode: widget.lessonCode,
                           );
                         },
                       ),
@@ -213,6 +218,4 @@ class _BluetoothMainPageState extends State<BluetoothMainPage> {
       ),
     );
   }
-
-
 }
