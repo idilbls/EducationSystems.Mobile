@@ -59,6 +59,9 @@ class _RoundedPasswordFieldState extends State<RoundedPasswordField> {
               errorBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: kErrorColor, width: 3.0),
               ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: kErrorColor, width: 3.0),
+              ),
             ),
             validator: widget.validator,
             onSaved: widget.onSaved,

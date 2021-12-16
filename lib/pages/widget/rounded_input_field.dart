@@ -49,6 +49,9 @@ class RoundedInputField extends StatelessWidget {
               errorBorder:  OutlineInputBorder(
                 borderSide: BorderSide(color: kErrorColor, width: 3.0),
               ),
+              focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: kErrorColor, width: 3.0),
+              ),
             ),
             validator: validator,
             onSaved: onSaved,
