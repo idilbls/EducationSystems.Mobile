@@ -59,13 +59,16 @@ class _ProfessorBluetoothMainPageState extends State<ProfessorBluetoothMainPage>
     }).then((_) {
       // Update the address field
       FlutterBluetoothSerial.instance.address.then((address) {
-        setState(() {
-          _address = address;
-          context.read<ProfessorSectionsBloc>().repository.updateLocalAddress(new LocalAddressRequest(
-              userId: _user.id,
-              localAddress: _address
-          ));
-        });
+        if(mounted)
+          {
+            setState(() {
+              _address = address;
+              context.read<ProfessorSectionsBloc>().repository.updateLocalAddress(new LocalAddressRequest(
+                  userId: _user.id,
+                  localAddress: _address
+              ));
+            });
+          }
       });
     });
 
