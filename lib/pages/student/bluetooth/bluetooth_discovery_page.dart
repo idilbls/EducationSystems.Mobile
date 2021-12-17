@@ -173,7 +173,7 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
           },
           onLongPress: () async {
             _getUser(buildContext,widget.professorId).then((value)async{
-              if(currentProfessor.localAddress == device.address) {
+              // if(currentProfessor.localAddress == device.address) {
                 try {
                   bool bonded = false;
                   if (device.isBonded) {
@@ -222,14 +222,14 @@ class _BluetoothDiscoveryPageState extends State<BluetoothDiscoveryPage> {
                     },
                   );
                 }
-              }
-              else{
-                fToast.showToast(
-                  child: toast,
-                  toastDuration: Duration(seconds: 3),
-                  fadeDuration: 2000,
-                );
-              }
+              // }
+              // else{
+              //   fToast.showToast(
+              //     child: toast,
+              //     toastDuration: Duration(seconds: 3),
+              //     fadeDuration: 2000,
+              //   );
+              // }
             });
 
           },
